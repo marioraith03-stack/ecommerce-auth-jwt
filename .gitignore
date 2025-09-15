@@ -1,0 +1,23 @@
+# Maven/Java
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+*.jar
+*.war
+*.log
+
+# IntelliJ IDEA
+**/.idea/
+*.iml
+out/
+
+# VS Code 
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test-/Coverage-Reports
+target/surefire-reports/
+target/site/
