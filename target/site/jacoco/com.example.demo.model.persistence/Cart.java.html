@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Cart.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">auth-course</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.model.persistence</a> &gt; <span class="el_source">Cart.java</span></div><h1>Cart.java</h1><pre class="source lang-java linenums">package com.example.demo.model.persistence;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = &quot;cart&quot;)
+<span class="fc" id="L20">public class Cart {</span>
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty
+	@Column
+	private Long id;
+	
+	@ManyToMany
+	@JsonProperty
+	@Column
+    private List&lt;Item&gt; items;
+	
+	@OneToOne(mappedBy = &quot;cart&quot;)
+	@JsonProperty
+    private User user;
+	
+	@Column
+	@JsonProperty
+	private BigDecimal total;
+	
+	public BigDecimal getTotal() {
+<span class="nc" id="L42">		return total;</span>
+	}
+
+	public void setTotal(BigDecimal total) {
+<span class="nc" id="L46">		this.total = total;</span>
+<span class="nc" id="L47">	}</span>
+
+	public User getUser() {
+<span class="nc" id="L50">		return user;</span>
+	}
+
+	public void setUser(User user) {
+<span class="nc" id="L54">		this.user = user;</span>
+<span class="nc" id="L55">	}</span>
+
+	public Long getId() {
+<span class="nc" id="L58">		return id;</span>
+	}
+
+	public void setId(Long id) {
+<span class="nc" id="L62">		this.id = id;</span>
+<span class="nc" id="L63">	}</span>
+
+	public List&lt;Item&gt; getItems() {
+<span class="nc" id="L66">		return items;</span>
+	}
+
+	public void setItems(List&lt;Item&gt; items) {
+<span class="nc" id="L70">		this.items = items;</span>
+<span class="nc" id="L71">	}</span>
+	
+	public void addItem(Item item) {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">		if(items == null) {</span>
+<span class="nc" id="L75">			items = new ArrayList&lt;&gt;();</span>
+		}
+<span class="nc" id="L77">		items.add(item);</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		if(total == null) {</span>
+<span class="nc" id="L79">			total = new BigDecimal(0);</span>
+		}
+<span class="nc" id="L81">		total = total.add(item.getPrice());</span>
+<span class="nc" id="L82">	}</span>
+	
+	public void removeItem(Item item) {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		if(items == null) {</span>
+<span class="nc" id="L86">			items = new ArrayList&lt;&gt;();</span>
+		}
+<span class="nc" id="L88">		items.remove(item);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">		if(total == null) {</span>
+<span class="nc" id="L90">			total = new BigDecimal(0);</span>
+		}
+<span class="nc" id="L92">		total = total.subtract(item.getPrice());</span>
+<span class="nc" id="L93">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

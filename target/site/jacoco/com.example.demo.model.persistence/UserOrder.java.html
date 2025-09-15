@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserOrder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">auth-course</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.model.persistence</a> &gt; <span class="el_source">UserOrder.java</span></div><h1>UserOrder.java</h1><pre class="source lang-java linenums">package com.example.demo.model.persistence;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@Entity
+@Table(name = &quot;user_order&quot;)
+<span class="fc" id="L23">public class UserOrder {</span>
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty
+	@Column
+	private Long id;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JsonProperty
+	@Column
+    private List&lt;Item&gt; items;
+	
+	@ManyToOne
+	@JoinColumn(name=&quot;user_id&quot;, nullable = false, referencedColumnName = &quot;id&quot;)
+	@JsonProperty
+    private User user;
+	
+	@JsonProperty
+	@Column
+	private BigDecimal total;
+
+	public Long getId() {
+<span class="nc" id="L46">		return id;</span>
+	}
+
+	public void setId(Long id) {
+<span class="nc" id="L50">		this.id = id;</span>
+<span class="nc" id="L51">	}</span>
+
+	public List&lt;Item&gt; getItems() {
+<span class="nc" id="L54">		return items;</span>
+	}
+
+	public void setItems(List&lt;Item&gt; items) {
+<span class="nc" id="L58">		this.items = items;</span>
+<span class="nc" id="L59">	}</span>
+
+	public User getUser() {
+<span class="nc" id="L62">		return user;</span>
+	}
+
+	public void setUser(User user) {
+<span class="nc" id="L66">		this.user = user;</span>
+<span class="nc" id="L67">	}</span>
+	
+	public BigDecimal getTotal() {
+<span class="nc" id="L70">		return total;</span>
+	}
+
+	public void setTotal(BigDecimal total) {
+<span class="nc" id="L74">		this.total = total;</span>
+<span class="nc" id="L75">	}</span>
+
+	public static UserOrder createFromCart(Cart cart) {
+<span class="nc" id="L78">		UserOrder order = new UserOrder();</span>
+<span class="nc" id="L79">		order.setItems(cart.getItems().stream().collect(Collectors.toList()));</span>
+<span class="nc" id="L80">		order.setTotal(cart.getTotal());</span>
+<span class="nc" id="L81">		order.setUser(cart.getUser());</span>
+<span class="nc" id="L82">		return order;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
