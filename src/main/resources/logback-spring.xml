@@ -1,16 +1,39 @@
 <configuration>
-    <appender name="SPLUNK" class="com.splunk.logging.HttpEventCollectorLogbackAppender">
-        <!-- setze diese Umgebungsvariablen in deiner Maschine/Jenkins -->
-        <url>${SPLUNK_URL}</url>            <!-- z.B. https://splunk.company.com:8088 -->
-        <token>${SPLUNK_TOKEN}</token>      <!-- HEC Token -->
-        <source>ecommerce-app</source>
-        <sourcetype>_json</sourcetype>
-        <index>${SPLUNK_INDEX:-main}</index>
-        <batch_size_count>1</batch_size_count> <!-- sofort senden -->
-    </appender>
+
+
+    <property name="SPLUNK_URL"   value="${SPLUNK_HEC_URL:-https://127.0.0.1:8088}"/>
+    <property name="SPLUNK_TOKEN" value="${SPLUNK_HEC_TOKEN:-c143b67b-44e3-4df9-8dc0-d892da41844a}"/>
+    <property name="SPLUNK_INDEX" value="${SPLUNK_INDEX:-ecommerce}"/>
+
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder><pattern>%d %-5level [%thread] %logger{36} - %msg%n</pattern></encoder>
+        <encoder>
+            <pattern>%d{ISO8601} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="SPLUNK" class="com.splunk.logging.HttpEventCollectorLogbackAppender">
+        <url>${SPLUNK_URL}</url>
+        <token>${SPLUNK_TOKEN}</token>
+        <index>${SPLUNK_INDEX}</index>
+
+
+        <sourcetype>springboot</sourcetype>
+        <source>ecommerce-auth</source>
+        <host>${HOSTNAME:-local}</host>
+
+
+        <disableCertificateValidation>true</disableCertificateValidation>
+
+
+        <batch_size_count>1</batch_size_count>
+        <batch_interval>200</batch_interval>
+        <send_mode>sequential</send_mode>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{ISO8601} %-5level %logger{36} - %msg%n</pattern>
+        </layout>
     </appender>
 
     <root level="INFO">

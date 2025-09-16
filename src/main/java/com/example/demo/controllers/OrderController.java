@@ -34,36 +34,38 @@ public class OrderController {
 	
 	@Autowired
 	private OrderRepository orderRepository;
-	
-	
+
+
 	@PostMapping("/submit/{username}")
 	public ResponseEntity<UserOrder> submit(@PathVariable String username) {
-		String current = SecurityUtils.currentUsername();
-		if (current == null || !current.equals(username)) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		try {
+			User user = userRepository.findByUsername(username);
+			if (user == null) {
+				log.warn("Order submit failure reason=user_not_found username={}", username);
+				return ResponseEntity.notFound().build();
+			}
+			UserOrder order = UserOrder.createFromCart(user.getCart());
+			orderRepository.save(order);
+			log.info("Order submit success username={} items={} total={}",
+					username,
+					order.getItems() != null ? order.getItems().size() : 0,
+					order.getTotal());
+			return ResponseEntity.ok(order);
+		} catch (Exception e) {
+			log.error("Order submit failure reason=exception username={}", username, e);
+			throw e;
 		}
-
-		User user = userRepository.findByUsername(username);
-		if(user == null) {
-			return ResponseEntity.notFound().build();
-		}
-		UserOrder order = UserOrder.createFromCart(user.getCart());
-		orderRepository.save(order);
-		log.info("order submit success username={}", username);
-
-		return ResponseEntity.ok(order);
 	}
-	
+
 	@GetMapping("/history/{username}")
 	public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username) {
-		String current = SecurityUtils.currentUsername();
-		if (current == null || !current.equals(username)) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-		}
 		User user = userRepository.findByUsername(username);
-		if(user == null) {
+		if (user == null) {
+			log.warn("Order history failure reason=user_not_found username={}", username);
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(orderRepository.findByUser(user));
+		List<UserOrder> orders = orderRepository.findByUser(user);
+		log.info("Order history success username={} count={}", username, orders.size());
+		return ResponseEntity.ok(orders);
 	}
 }
