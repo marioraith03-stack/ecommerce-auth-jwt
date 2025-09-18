@@ -47,12 +47,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>com.splunk.logging</groupId>
-			<artifactId>splunk-library-javalogging</artifactId>
-			<version>1.11.5</version>
-		</dependency>
-
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -75,6 +69,13 @@
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
 			<version>4.4.0</version>
+		</dependency>
+
+		<!-- Splunk -->
+		<dependency>
+			<groupId>com.splunk.logging</groupId>
+			<artifactId>splunk-library-javalogging</artifactId>
+			<version>1.11.6</version>
 		</dependency>
 
 		<!-- Tests  -->

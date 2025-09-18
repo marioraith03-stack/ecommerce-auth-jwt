@@ -28,7 +28,14 @@ public class UserController {
 		this.cartRepository = cartRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
-
+	@GetMapping("/username/{username}")
+	public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+		User u = userRepository.findByUsername(username);
+		if (u == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(u);
+	}
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
 		return userRepository.findById(id)
@@ -44,7 +51,7 @@ public class UserController {
 
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest req) {
-		// 1) Validierung
+		// 1) Vali
 		if (req.getPassword() == null || req.getPassword().length() < 7) {
 			log.warn("CreateUser failure reason=pwd_too_short username={}", req.getUsername());
 			return ResponseEntity.badRequest().build();
@@ -54,7 +61,7 @@ public class UserController {
 			return ResponseEntity.badRequest().build();
 		}
 
-		// 2) User + Cart
+
 		User user = new User();
 		user.setUsername(req.getUsername());
 
@@ -62,14 +69,16 @@ public class UserController {
 		cartRepository.save(cart);
 		user.setCart(cart);
 
-		// 3) Passwort hashen
+		//hash
 		user.setPassword(passwordEncoder.encode(req.getPassword()));
 
-		// 4) Speichern
+
 		userRepository.save(user);
 		log.info("CreateUser success username={}", user.getUsername());
 
-		// 5) Response (password ist per @JsonIgnore nicht im Body)
+
 		return ResponseEntity.ok(user);
 	}
+
+
 }

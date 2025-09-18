@@ -24,14 +24,13 @@ public class User {
 	@Column(unique = true)
 	private String username;
 
-	@JsonIgnore
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cart_id")
 	private Cart cart;
 
-	// getters/setters ...
 	public String getPassword() { return password; }
 	public void setPassword(String password) { this.password = password; }
 	
